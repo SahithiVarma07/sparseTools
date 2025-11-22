@@ -1,0 +1,94 @@
+---
+output: github_document
+---
+
+# sparseTools <img src="https://img.shields.io/badge/R-package-blue.svg" align="right"/>
+
+[![R-CMD-check](https://github.com/SahithiVarma07/sparseTools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SahithiVarma07/sparseTools/actions/workflows/R-CMD-check.yaml)
+
+## Overview
+
+`sparseTools` is an R package that implements an S4 class for sparse numeric vectors, called `sparse_numeric`.  
+
+Its use is to provide a class for sparse numeric vectors along with methods to work witht hose vectors without ever converting them to a dense vector
+
+Rather than storing every zero, the class stores only:
+
+- the non-zero values  
+- their positions  
+- the full length of the vector  
+
+
+
+---
+
+## How the Package Works
+
+A `sparse_numeric` object stores:
+
+- `value`: numeric vector of non-zero entries  
+- `pos`: integer vector of the corresponding positions  
+- `length`: full length of the dense vector  
+
+ the package implements:
+
+### Coercions
+- Convert numeric → sparse: `as(x, "sparse_numeric")`
+- Convert sparse → numeric: `as(x, "numeric")`
+- `as.numeric(x)` method
+
+### Arithmetic
+- `sparse_add(x, y)`
+- `sparse_sub(x, y)`
+- `sparse_mult(x, y)`
+- `sparse_crossprod(x, y)` (dot product)
+- Overloaded operators: `+`, `-`, `*`
+
+### Mathematical utilities
+- `mean(x)`
+- `norm(x)` (Euclidean norm)
+- `standardize(x)` (z-score scaling)
+
+
+---
+
+## Installation
+
+Install the package with:
+
+```r
+# install.packages("devtools")
+devtools::install_github("SahithiVarma07/sparseTools")
+
+```
+
+## Example Usage
+
+```r
+library(sparseTools)
+
+# Create a sparse vector from a regular numeric vector
+x <- as(c(0, 3, 0, 5), "sparse_numeric")
+x
+as.numeric(x)
+
+# Compute mean (includes zeros)
+mean(x)
+
+# Euclidean norm
+norm(x)
+
+# Standardize the vector (z-score)
+s <- standardize(x)
+as.numeric(s)
+
+# Arithmetic
+y <- as(c(1, 0, 2, 0), "sparse_numeric")
+
+as.numeric(x + y)
+as.numeric(x - y)
+as.numeric(x * y)
+
+# Dot product
+sparse_crossprod(x, y)
+```
